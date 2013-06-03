@@ -6,7 +6,7 @@ User friendly web client to access SPOT4 (Take5) data (http://www.cesbio.ups-tls
 Installation
 ============
 
-This document suppose that Take5 application will be installed in $TARGET directory
+This document supposes that Take5 application will be installed in $TARGET directory
 
 Apache configuration (Linux ubuntu)
 --------------------------------------
@@ -30,19 +30,10 @@ Note: $TARGET should be replaced by the $TARGET value (i.e. if $TARGET=/var/www/
 Build take5
 -----------
 
-The first time, peform a complete build
+The first time, you need to peform a complete build
 
         ./build.sh -a -t $TARGET
 
-Once mapshup is cloned and compiled, perform a partial build each time you change a file from the src directory.
+Once mapshup is cloned and compiled, you need to perform a partial build each time you change a file from the src directory.
 
         ./build.sh -t $TARGET
-
-
-
-
-
-
-
-
-
