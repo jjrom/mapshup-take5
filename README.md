@@ -30,11 +30,14 @@ Note: $TARGET should be replaced by the $TARGET value (i.e. if $TARGET=/var/www/
 Build take5
 -----------
 
-Usage ./build.sh -t <target directory> [-s <source directory> -p <project name> -a -c]
+The first time, peform a complete build
 
- -a : performs steps 1. mapshup git clone, 2. mapshup compile and 3. build
- -c : perform steps 1. mapshup compile and 2.build
- (By default, only build step is performed)
+        ./build.sh -a -t $TARGET
+
+Once mapshup is cloned and compiled, perform a partial build each time you change a file from the src directory.
+
+        ./build.sh -t $TARGET
+
 
 
 
