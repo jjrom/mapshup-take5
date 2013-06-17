@@ -44,9 +44,10 @@
             {
                 name: "Take5",
                 options: {
-                    searchService: "http://localhost/ptsc/take5/www/ws/search.php?q=",
-                    rootUrl: "http://localhost/ptsc/take5/www/sites/",
-                    sitesUrl: "http://localhost/ptsc/take5/www/ws/getSites.php?language="
+                    /*searchService: "http://localhost/ptsc/take5/www/ws/search.php?q=",
+                    sitesUrl: "http://localhost/ptsc/take5/www/ws/getSites.php?language="*/
+                    searchService: "http://spirit.cnes.fr/take5/ws/search.php?q=",
+                    sitesUrl: "http://spirit.cnes.fr/take5/ws/getSites.php?language="
                 }
             }
     );

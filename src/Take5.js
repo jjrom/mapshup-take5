@@ -48,8 +48,7 @@
             options = options || {};
 
             $.extend(self, {
-                searchService: options.searchService,
-                rootUrl: options.rootUrl
+                searchService: options.searchService
             });
 
             /*
