@@ -70,7 +70,7 @@ lib/plugins/Catalog/OpenSearch.js
 #lib/plugins/GetFeatureInfo.js
 #lib/plugins/GetLandCover.js
 #lib/plugins/GoogleEarth.js // NOTOUCH
-lib/plugins/Help.js
+#lib/plugins/Help.js
 #lib/plugins/LayerInfo.js
 #lib/plugins/RastersManager.js
 #lib/plugins/LayersManager.js

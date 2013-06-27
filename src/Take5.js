@@ -32,6 +32,16 @@
          * Site features
          */
         this.features = [];
+        
+        /*
+         * Layers
+         */
+        this.layers = [];
+        
+        /**
+         * Selected Feature
+         */
+        this.selectedFeature = null;
 
         /**
          * Init plugin
@@ -40,7 +50,7 @@
          */
         this.init = function(options) {
 
-            var options, id = M.Util.getId(), self = this;
+            var options, self = this;
 
             /*
              * Init options
@@ -48,7 +58,11 @@
             options = options || {};
 
             $.extend(self, {
-                searchService: options.searchService
+                searchService: options.searchService,
+                downloadUrl: options.downloadUrl,
+                licenseUrl: options.licenseUrl,
+                addUserDownloadUrl: options.addUserDownloadUrl,
+                aboutUrl: options.aboutUrl
             });
 
             /*
@@ -59,16 +73,7 @@
             /*
              * Set Help and links
              */
-            M.Util.$$('#Mheader').append('<div class="links"><ul><li id="' + id + 'a">' + self._("About") + '</li><li><a href="http://ptsc.teledetection.fr" target="_blank">PTSC</a></li></ul></div>');
-
-            $('#' + id + 'a').click(function() {
-                if (M.Plugins.Help && M.Plugins.Help._o) {
-                    M.Plugins.Help._o.show();
-                }
-            });
-            $('#' + id + 'l').click(function() {
-                $('#ptsclink').trigger('click');
-            });
+            M.Util.$$('#Mheader').append('<div class="links"><ul><li><a href="' + self.aboutUrl + '" target="_blank">' + self._("About") + '</a></li></ul></div>');
 
             /*
              * Tell user that Take5 initializes
@@ -259,7 +264,7 @@
                 dataType: "json",
                 success: function(json) {
 
-                    var i, l, id = M.Util.getId();
+                    var i, l, id = M.Util.getId(),id2 = M.Util.getId();
 
                     /*
                      * Double check if there are products
@@ -284,7 +289,8 @@
                              *           Download
                              *           Download serie
                              */
-                            $('#side2').html('<p class="title">' + self._("Available products") + '</p><div class="quickselector"><ul id="' + id + '"></ul></div><div class="center"><a id="' + id + 'd" class="button inline download">&nbsp;&nbsp;' + self._("Download product") + '&nbsp;&nbsp;</a></div></br><div class="center"><a id="' + id + 'da" class="button inline downloadall">&nbsp;&nbsp;' + self._("Download serie") + '&nbsp;&nbsp;</a></div>');
+                            //$('#side2').html('<p class="title">' + self._("Available products") + '</p><div class="quickselector"><ul id="' + id + '"></ul></div><div class="center"><a id="' + id + 'd" class="button inline download">&nbsp;&nbsp;' + self._("Download product") + '&nbsp;&nbsp;</a></div></br><div class="center"><a id="' + id + 'da" class="button inline downloadall">&nbsp;&nbsp;' + self._("Download serie") + '&nbsp;&nbsp;</a></div>');
+                            $('#side2').html('<p class="title">' + self._("Available products") + '</p><div class="quickselector"><ul id="' + id + '"><li class="level">N1TUILE</li></ul><ul id="' + id2 + '"><li class="level">N2A</li></ul></div><div class="center-buttons"><a id="' + id + 'dp" class="button inline download">&nbsp;&nbsp;' + self._("Download product") + '&nbsp;&nbsp;</a></div></br><div class="center-buttons"><a id="' + id + 'dl1c" class="button inline download">&nbsp;&nbsp;' + self._("Download level 1C") + '&nbsp;&nbsp;</a></div></br><div class="center-buttons"><a id="' + id + 'dl2a" class="button inline download">&nbsp;&nbsp;' + self._("Download level 2A") + '&nbsp;&nbsp;</a></div></br>');
 
                             for (i = 0; i < l; i++) {
 
@@ -293,9 +299,14 @@
                                 /*
                                  * Activate or not
                                  */
-                                (function(feature, $d) {
+                                (function(feature, $d, $d2) {
 
-                                    $d.append('<li id="' + feature.id + '" jtitle="' + self.stripTime(feature.properties.startDate) + '" class="thumbs"><img src="' + feature.properties.thumbnail + '"/></li>');
+                                    if(feature.properties.level === "N1_TUILE") {
+                                        $d.append('<li id="' + feature.id + '" jtitle="' + self.stripTime(feature.properties.startDate) + '" class="thumbs"><img src="' + feature.properties.thumbnail + '"/></li>');
+                                    } else {
+                                        $d2.append('<li id="' + feature.id + '" jtitle="' + self.stripTime(feature.properties.startDate) + '" class="thumbs"><img src="' + feature.properties.thumbnail + '"/></li>');
+                                    }
+                                    
                                     M.tooltip.add($('#' + feature.id), 's');
 
                                     /*
@@ -305,7 +316,18 @@
 
                                         e.preventDefault();
                                         e.stopPropagation();
-
+                                        
+                                        self.selectedFeature = feature;
+                                        
+                                        for(var j=0;j<self.layers.length;j++) {
+                                            M.Map.removeLayer(self.layers[j]);
+                                        }
+                                        self.layers.length = 0;
+                                        //
+                                        var layer = M.Map.addLayer(feature.properties.services.browse.layer,{
+                                            noDeletionCheck: true
+                                        });
+                                        self.layers.push(layer);
                                         /*
                                          * Activate/Deactivate 
                                          */
@@ -320,7 +342,7 @@
                                         return false;
                                     });
 
-                                })(self.features[i], $('#' + id));
+                                })(self.features[i], $('#' + id), $('#' + id2));
 
                             }
 
@@ -332,23 +354,105 @@
                             /*
                              * Set downlad link
                              */
-                            $('#' + id + 'd').click(function() {
-
-                                /*
-                                 * Get active product
-                                 */
-                                var href = '#';
-                                for (var i = 0, l = self.features.length; i < l; i++) {
-                                    if ($('img', $('#' + self.features[i].id)).hasClass('active')) {
-                                        href = self.features[i].properties.services.download.url;
-                                        break;
+                            $('#' + id + 'dp').click(function() {
+                                var content = '<form id="downloadProduct">';
+                                content += '<label>'+M.Plugins.Take5._o._("Last name")+'</label>';
+                                content += '<input type="text" id="lastName" style="margin-bottom:10px;" required>';
+                                content += '</br>';
+                                content += '<label>'+M.Plugins.Take5._o._("First name")+'</label>';
+                                content += '<input type="text" id="firstName" style="margin-bottom:10px;" required>';
+                                content += '</br>';
+                                content += '<label>'+M.Plugins.Take5._o._("Email")+'</label>';
+                                content += '<input type="email" id="email" style="margin-bottom:10px;" required>';
+                                content += '</br>';
+                                content += '<textarea style="width:560px;height:100px;margin-bottom:10px;" disabled>';
+                                content += '</textarea>';
+                                content += '</br>';
+                                content += '<label style="width:400px;">'+M.Plugins.Take5._o._("I have read the license to use and I agree to abide by the terms")+'</label>';
+                                content += '<input type="checkbox" id="accept">';
+                                content += '</form>';
+                                var popup;
+                                var options = {
+                                    title:	M.Util._("Download products"),
+                                    content: content,
+                                    dataType: "list",
+                                    resize: false,
+                                    value: [{
+                                        title:M.Util._("Ok"), 
+                                        value:"y"
+                                    },
+                                    {
+                                        title:M.Util._("Cancel"), 
+                                        value:"n"
+                                    }],
+                                    callback: function(v){
+                                        if (v === 'y') {
+                                            if($("#lastName").val().length === 0 || $("#firstName").val().length === 0 
+                                                    || $("#email").val().length === 0
+                                                || !$("#accept")[0].checked) {
+                                                alert(M.Plugins.Take5._o._("You have to fill all the fields and accept the license"));
+                                            } else {
+                                                window.open(M.Plugins.Take5._o.downloadUrl+"?file="+M.Plugins.Take5._o.selectedFeature.properties.services.download.url,
+                                                            "_blank");
+                                                
+                                                $.post(M.Plugins.Take5._o.addUserDownloadUrl, {
+                                                    lastname: $("#lastName").val(),
+                                                    firstname: $("#firstName").val(),
+                                                    email: $("#email").val(),
+                                                    file: M.Plugins.Take5._o.selectedFeature.properties.services.download.url
+                                                });
+                                                popup.remove();
+                                            }
+                                        } else {
+                                            popup.remove();
+                                        }
                                     }
+                                };
+
+                                 /* Create popup */
+                                popup = new M.Popup({
+                                    modal:true,
+                                    autoSize:true,
+                                    centered:true,
+                                    resize:false,
+                                    header:options.title,
+                                    body:options.content ? options.content : ''
+
+                                });
+                                
+                                var el,icon,count = 0;
+                
+                                /*
+                                 * Roll over items
+                                 */
+                                for (var i in options.value) {
+                                    id = M.Util.getId();
+                                    el = options.value[i];
+                                    icon = el.icon ? '<img class="middle" src="'+el.icon+'"/>&nbsp;' : '';
+                                    popup.append('<a href="#" class="button marged" id="'+id+'">'+icon+el.title+'</a>', 'body');
+
+                                    /*
+                                     * Return item value to callback on click
+                                     */
+                                    (function(d, a, c, v){
+                                        a.click(function(e){
+                                            if ($.isFunction(c)){
+                                                c(v);
+                                            }
+                                        });
+                                    })(popup, $('#'+id), options.callback, el.value);
+
+                                    count++;
                                 }
-
-                                $(this).attr('target', '_blank').attr('href', href);
-
-                                return true;
-
+                                
+                                /*
+                                * Show the modal window
+                                */
+                               popup.show();
+                               
+                               $.get(M.Plugins.Take5._o.licenseUrl,function(data) {
+                                   $('textarea').html(data);
+                               });
                             });
                             
                             /*
@@ -428,8 +532,16 @@
             texts["Search products"] = ["Recherche de produits"];
             texts["Download product"] = ["Télécharger le produit"];
             texts["Download serie"] = ["Télécharger la série"];
+            texts["Download level 1C"] = ["Télécharger tout le Niveau 1C"];
+            texts["Download level 2A"] = ["Télécharger tout le Niveau 2A"];
+            texts["Download serie"] = ["Télécharger la série"];
             texts["All right reserved"] = ["Tous droits réservés"];
             texts["Take 5 project"] = ["Projet Take 5"];
+            texts["Last name"] = ["Nom"];
+            texts["First name"] = ["Prénom"];
+            texts["Email"] = ["Email"];
+            texts["I have read the license to use and I agree to abide by the terms"] = ["J\'ai lu la license d\'utilisation et je m\'engage à en respecter les termes"];
+            texts["You have to fill all the fields and accept the license"] = ["Vous devez remplir tous les champs et accepter la license"];
             
             if (M.Config.i18n.lang === 'fr') {
                 return texts[text] || text;

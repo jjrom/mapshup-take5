@@ -5,9 +5,9 @@
      * 
      * Should be changed to match target server
      */
-    c["general"].rootUrl = "http://localhost/mapshupTake5";
+    c["general"].rootUrl = "http://spirit.cnes.fr/take5";
     c["general"].serverRootUrl = c["general"].rootUrl + "/s";
-
+    c["general"].proxyUrl = null;
 
     /*
      * !! DO NOT EDIT UNDER THIS LINE !!
@@ -36,18 +36,16 @@
         orientation: 'h',
         home: null
     });
-    c.extend("Help", {
-        noLogo: true,
-        rootUrl: c["general"].rootUrl + 'take5'
-    });
     c.add("plugins",
             {
                 name: "Take5",
                 options: {
-                    /*searchService: "http://localhost/ptsc/take5/www/ws/search.php?q=",
-                    sitesUrl: "http://localhost/ptsc/take5/www/ws/getSites.php?language="*/
-                    searchService: "http://spirit.cnes.fr/take5/ws/search.php?q=",
-                    sitesUrl: "http://spirit.cnes.fr/take5/ws/getSites.php?language="
+                    searchService: c["general"].rootUrl + "/ws/search.php?q=",
+                    sitesUrl: c["general"].rootUrl + "/ws/getSites.php?language=",
+                    downloadUrl: c["general"].rootUrl + "/ws/getProductFile.php",
+                    licenseUrl: c["general"].rootUrl + "/license.txt",
+                    addUserDownloadUrl: c["general"].rootUrl + "/ws/take5AddDownload.php",
+                    aboutUrl: "http://www.ptsc.fr/fr/produits/spot4-take5"
                 }
             }
     );

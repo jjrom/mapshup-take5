@@ -117,7 +117,6 @@ body {
     background-color:#f3961c;
     color:#fff;
     height:300px;
-    width:350px;
     padding:10px;
     float: left;
 }
@@ -130,12 +129,12 @@ body {
 #Mfooter .container #rightCol {
     height:300px;
     padding:10px;
-    width: 67%;
+    width: 70%;
     float: right;
     margin: 0;
 }
 #rightCol #side1 {
-    width: 49%;
+    width: 380px;
     float: left;
 }
 #side1 img {
@@ -157,12 +156,27 @@ body {
     float:left;
     bottom:auto;
     right:auto;
-    margin-bottom:40px;
+    margin-bottom:20px;
+}
+
+.quickselector ul li {
+    display: inline;
+}
+.center-buttons {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.level {
+    font-size: 1.2em;
+    font-weight: bold;
+    width: 80px;
 }
 
 .button.download, .button.downloadall {
     font-family:'Open Sans Condensed', sans-serif;
-    font-size:1.6em;
+    font-size:1.2em;
     font-weight:bold;
 }
 .button.download {
@@ -178,4 +192,45 @@ body {
     margin-left:220px;
     font-size: 5em;
     font-weight: bold;
+}
+
+.poa {
+    max-width:none;
+    top: 20px;
+}
+
+.po .generic {
+    max-height: none;
+}
+
+label {
+    width:150px;
+    display: inline-block;
+    vertical-align: top;
+}
+input {
+    width:200px;
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: 10px;
+}
+textarea {
+    display: inline-block;
+    vertical-align: top;
+}
+
+input[type="email"] {
+    -moz-border-bottom-colors: none;
+    border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    -moz-box-sizing: border-box;
+    background: none repeat scroll 0px 0px rgb(255, 255, 255);
+    border-color: rgb(192, 192, 192) rgb(217, 217, 217) rgb(217, 217, 217);
+    border-style: solid;
+    border-width: 1px;
+    height: 29px;
+    padding: 0px 8px;
+    display: inline-block;
 }
