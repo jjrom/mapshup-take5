@@ -409,17 +409,17 @@
 
                                     if (feature.properties.product === "REFLECTANCE" && firstReflectance) {
                                         firstReflectance = false;
-                                        $d.append('<li id="dl1c" jtitle="' + self._("Download all Level 2A products")  + '" class="thumbs"><img src="./take5/img/level2A.png"/></li>');
-                                        M.tooltip.add($('#dl1c'), 's');
-                                        $('#dl1c').click(function() {
+                                        $d.append('<li id="dl2a" jtitle="' + self._("Download all Level 2A products")  + '" class="thumbs"><img src="./take5/img/level2A.png"/></li>');
+                                        M.tooltip.add($('#dl2a'), 's');
+                                        $('#dl2a').click(function() {
                                             M.Plugins.Take5._o.displayPopupDownload(M.Plugins.Take5._o.selectedSite.attributes.identifier+"_LEVEL1C.tar", M.Plugins.Take5._o.selectedSite.attributes.identifier + " - " + self._("Level 1C"));
                                         });
                                     }
                                     else if (feature.properties.product === "REFLECTANCETOA" && firstReflectanceTOA) {
                                         firstReflectanceTOA = false;
-                                        $d.append('<li id="dl2a" jtitle="' + self._("Download all Level 1C products")  + '" class="thumbs"><img src="./take5/img/level1C.png"/></li>');
-                                        M.tooltip.add($('#dl2a'), 's');
-                                        $('#dl2a').click(function() {
+                                        $d.append('<li id="dl1c" jtitle="' + self._("Download all Level 1C products")  + '" class="thumbs"><img src="./take5/img/level1C.png"/></li>');
+                                        M.tooltip.add($('#dl1c'), 's');
+                                        $('#dl1c').click(function() {
                                             M.Plugins.Take5._o.displayPopupDownload(M.Plugins.Take5._o.selectedSite.attributes.identifier+"_LEVEL2A.tar", M.Plugins.Take5._o.selectedSite.attributes.identifier + " - " + self._("Level 2A"));
                                         });
                                     }
@@ -540,8 +540,8 @@
             texts["Search products"] = ["Recherche de produits"];
             texts["Download"] = ["Télécharger"];
             texts["Download serie"] = ["Télécharger la série"];
-            texts["Download all Level 1C"] = ["Télécharger tout le Niveau 1C"];
-            texts["Download all Level 2A"] = ["Télécharger tout le Niveau 2A"];
+            texts["Download all Level 1C products"] = ["Télécharger tout le Niveau 1C"];
+            texts["Download all Level 2A products"] = ["Télécharger tout le Niveau 2A"];
             texts["All right reserved"] = ["Tous droits réservés"];
             texts["Take 5 project"] = ["Projet Take 5"];
             texts["Last name"] = ["Nom"];
