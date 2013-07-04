@@ -36,15 +36,16 @@
         orientation: 'h',
         home: null
     });
+    
     c.add("plugins",
             {
                 name: "Take5",
                 options: {
-                    searchService: c["general"].rootUrl + "/ws/search.php?q=",
-                    sitesUrl: c["general"].rootUrl + "/ws/getSites.php?language=",
-                    downloadUrl: c["general"].rootUrl + "/ws/getProductFile.php",
+                    searchService: "http://spirit.cnes.fr/take5/ws/search.php?q=",
+                    sitesUrl: "http://spirit.cnes.fr/take5/ws/getSites.php?language=",
+                    downloadUrl: "http://spirit.cnes.fr/take5/ws/getProductFile.php",
                     licenseUrl: c["general"].rootUrl + "/license.txt",
-                    addUserDownloadUrl: c["general"].rootUrl + "/ws/take5AddDownload.php",
+                    addUserDownloadUrl: "http://spirit.cnes.fr/take5/ws/take5AddDownload.php",
                     aboutUrl: "http://www.ptsc.fr/fr/produits/spot4-take5"
                 }
             }

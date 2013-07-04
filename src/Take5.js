@@ -42,6 +42,11 @@
          * Selected Feature
          */
         this.selectedFeature = null;
+        
+        /**
+         * Selected Site
+         */
+        this.selectedSite = null;
 
         /**
          * Init plugin
@@ -240,6 +245,108 @@
             return null;
         };
 
+	this.displayPopupDownload = function(file, title) {
+		var content = '<form id="downloadProduct">';
+                content += '<label>'+M.Plugins.Take5._o._("Last name")+'</label>';
+                content += '<input type="text" id="lastName" style="margin-bottom:10px;" required>';
+                content += '</br>';
+                content += '<label>'+M.Plugins.Take5._o._("First name")+'</label>';
+                content += '<input type="text" id="firstName" style="margin-bottom:10px;" required>';
+                content += '</br>';
+                content += '<label>'+M.Plugins.Take5._o._("Email")+'</label>';
+                content += '<input type="email" id="email" style="margin-bottom:10px;" required>';
+                content += '</br>';
+                content += '<textarea style="width:560px;height:100px;margin-bottom:10px;" disabled>';
+                content += '</textarea>';
+                content += '</br>';
+                content += '<label style="width:400px;">'+M.Plugins.Take5._o._("I have read the license to use and I agree to abide by the terms")+'</label>';
+                content += '<input type="checkbox" id="accept">';
+                content += '</form>';
+                var popup;
+                var options = {
+                    title: title,
+                    content: content,
+                    dataType: "list",
+                    resize: false,
+                    value: [{
+                        title:M.Util._("Ok"), 
+                        value:"y"
+                    },
+                    {
+                        title:M.Util._("Cancel"), 
+                        value:"n"
+                    }],
+                    callback: function(v){
+                        if (v === 'y') {
+                            if($("#lastName").val().length === 0 || $("#firstName").val().length === 0 
+                                    || $("#email").val().length === 0
+                                || !$("#accept")[0].checked) {
+                                alert(M.Plugins.Take5._o._("You have to fill all the fields and accept the license"));
+                            } else {
+                                window.open(M.Plugins.Take5._o.downloadUrl+"?file="+file,
+                                            "_blank");
+                                
+                                $.post(M.Plugins.Take5._o.addUserDownloadUrl, {
+                                    lastname: $("#lastName").val(),
+                                    firstname: $("#firstName").val(),
+                                    email: $("#email").val(),
+                                    file: file
+                                });
+                                popup.remove();
+                            }
+                        } else {
+                            popup.remove();
+                        }
+                    }
+                };
+
+                 /* Create popup */
+                popup = new M.Popup({
+                    modal:true,
+                    autoSize:true,
+                    centered:false,
+                    resize:false,
+                    header:options.title,
+		    parent: $('body'),
+                    body:options.content ? options.content : ''
+
+                });
+                
+                var el,icon,count = 0;
+
+                /*
+                 * Roll over items
+                 */
+                for (var i in options.value) {
+                    id = M.Util.getId();
+                    el = options.value[i];
+                    icon = el.icon ? '<img class="middle" src="'+el.icon+'"/>&nbsp;' : '';
+                    popup.append('<a href="#" class="button marged" id="'+id+'">'+icon+el.title+'</a>', 'body');
+
+                    /*
+                     * Return item value to callback on click
+                     */
+                    (function(d, a, c, v){
+                        a.click(function(e){
+                            if ($.isFunction(c)){
+                                c(v);
+                            }
+                        });
+                    })(popup, $('#'+id), options.callback, el.value);
+
+                    count++;
+                }
+                
+                /*
+                * Show the modal window
+                */
+               popup.show();
+               
+               $.get(M.Plugins.Take5._o.licenseUrl,function(data) {
+                   $('textarea').html(data);
+               });
+	};
+
         /*
          * Show site description
          * 
@@ -255,6 +362,8 @@
              */
             $('#leftCol .description').html(site.attributes.description);
 
+	    self.selectedSite = site;
+
             /*
              * Asynchronously retrieve products from site
              */
@@ -264,7 +373,7 @@
                 dataType: "json",
                 success: function(json) {
 
-                    var i, l, id = M.Util.getId(),id2 = M.Util.getId();
+                    var i, l, firstReflectance = true, firstReflectanceTOA = true, id = M.Util.getId();
 
                     /*
                      * Double check if there are products
@@ -286,27 +395,36 @@
                              * |        |        |        |
                              * +--------+--------+--------+
                              * 
-                             *           Download
-                             *           Download serie
                              */
-                            //$('#side2').html('<p class="title">' + self._("Available products") + '</p><div class="quickselector"><ul id="' + id + '"></ul></div><div class="center"><a id="' + id + 'd" class="button inline download">&nbsp;&nbsp;' + self._("Download product") + '&nbsp;&nbsp;</a></div></br><div class="center"><a id="' + id + 'da" class="button inline downloadall">&nbsp;&nbsp;' + self._("Download serie") + '&nbsp;&nbsp;</a></div>');
-                            $('#side2').html('<p class="title">' + self._("Available products") + '</p><div class="quickselector"><ul id="' + id + '"><li class="level">N1TUILE</li></ul><ul id="' + id2 + '"><li class="level">N2A</li></ul></div><div class="center-buttons"><a id="' + id + 'dp" class="button inline download">&nbsp;&nbsp;' + self._("Download product") + '&nbsp;&nbsp;</a></div></br><div class="center-buttons"><a id="' + id + 'dl1c" class="button inline download">&nbsp;&nbsp;' + self._("Download level 1C") + '&nbsp;&nbsp;</a></div></br><div class="center-buttons"><a id="' + id + 'dl2a" class="button inline download">&nbsp;&nbsp;' + self._("Download level 2A") + '&nbsp;&nbsp;</a></div></br>');
-
+                            $('#side2').html('<div class="quickselector"><ul id="' + id + '"></ul></div>');
+                            
                             for (i = 0; i < l; i++) {
 
                                 self.features[i].id = M.Util.getId();
-
+                                
                                 /*
                                  * Activate or not
                                  */
-                                (function(feature, $d, $d2) {
+                                (function(feature, $d) {
 
-                                    if(feature.properties.level === "N1_TUILE") {
-                                        $d.append('<li id="' + feature.id + '" jtitle="' + self.stripTime(feature.properties.startDate) + '" class="thumbs"><img src="' + feature.properties.thumbnail + '"/></li>');
-                                    } else {
-                                        $d2.append('<li id="' + feature.id + '" jtitle="' + self.stripTime(feature.properties.startDate) + '" class="thumbs"><img src="' + feature.properties.thumbnail + '"/></li>');
+                                    if (feature.properties.product === "REFLECTANCE" && firstReflectance) {
+                                        firstReflectance = false;
+                                        $d.append('<li id="dl1c" jtitle="' + self._("Download all Level 2A products")  + '" class="thumbs"><img src="./take5/img/level2A.png"/></li>');
+                                        M.tooltip.add($('#dl1c'), 's');
+                                        $('#dl1c').click(function() {
+                                            M.Plugins.Take5._o.displayPopupDownload(M.Plugins.Take5._o.selectedSite.attributes.identifier+"_LEVEL1C.tar", M.Plugins.Take5._o.selectedSite.attributes.identifier + " - " + self._("Level 1C"));
+                                        });
+                                    }
+                                    else if (feature.properties.product === "REFLECTANCETOA" && firstReflectanceTOA) {
+                                        firstReflectanceTOA = false;
+                                        $d.append('<li id="dl2a" jtitle="' + self._("Download all Level 1C products")  + '" class="thumbs"><img src="./take5/img/level1C.png"/></li>');
+                                        M.tooltip.add($('#dl2a'), 's');
+                                        $('#dl2a').click(function() {
+                                            M.Plugins.Take5._o.displayPopupDownload(M.Plugins.Take5._o.selectedSite.attributes.identifier+"_LEVEL2A.tar", M.Plugins.Take5._o.selectedSite.attributes.identifier + " - " + self._("Level 2A"));
+                                        });
                                     }
                                     
+                                    $d.append('<li id="' + feature.id + '" jtitle="' + self.stripTime(feature.properties.startDate) + '" class="thumbs"><img src="' + feature.properties.thumbnail + '"/></li>');
                                     M.tooltip.add($('#' + feature.id), 's');
 
                                     /*
@@ -334,15 +452,19 @@
                                         self.activate(feature.id);
 
                                         /*
-                                         * Callback
+                                         * Callback - set download link
                                          */
-                                        $('#side1').html('<div class="center"><img id="lastql" src="' + feature.properties.quicklook + '"/><p class="title">' + self.stripTime(feature.properties.startDate) + '</p></div>');
+                                        $('#side1').html('<div class="center"><img id="lastql" src="' + feature.properties.quicklook + '"/><p class="title"><a id="' + id + 'dp" class="button inline download">&nbsp;&nbsp;' + self._("Download") + " : " + self.stripTime(feature.properties.startDate) + " [" + (feature.properties.product === "REFLECTANCE" ? "2A" : "1C") + "]" +'&nbsp;&nbsp;</a></p></div>');
+                                        $('#' + id + 'dp').click(function() {
+                                            M.Plugins.Take5._o.displayPopupDownload(M.Plugins.Take5._o.selectedFeature.properties.services.download.url, M.Plugins.Take5._o.selectedFeature.properties.identifier);
+                                        });
+                                        
                                         self.resize();
 
                                         return false;
                                     });
 
-                                })(self.features[i], $('#' + id), $('#' + id2));
+                                })(self.features[i], $('#' + id));
 
                             }
 
@@ -350,120 +472,6 @@
                              * Trigger click on newest image
                              */
                             $('#' + self.features[0].id).trigger("click");
-
-                            /*
-                             * Set downlad link
-                             */
-                            $('#' + id + 'dp').click(function() {
-                                var content = '<form id="downloadProduct">';
-                                content += '<label>'+M.Plugins.Take5._o._("Last name")+'</label>';
-                                content += '<input type="text" id="lastName" style="margin-bottom:10px;" required>';
-                                content += '</br>';
-                                content += '<label>'+M.Plugins.Take5._o._("First name")+'</label>';
-                                content += '<input type="text" id="firstName" style="margin-bottom:10px;" required>';
-                                content += '</br>';
-                                content += '<label>'+M.Plugins.Take5._o._("Email")+'</label>';
-                                content += '<input type="email" id="email" style="margin-bottom:10px;" required>';
-                                content += '</br>';
-                                content += '<textarea style="width:560px;height:100px;margin-bottom:10px;" disabled>';
-                                content += '</textarea>';
-                                content += '</br>';
-                                content += '<label style="width:400px;">'+M.Plugins.Take5._o._("I have read the license to use and I agree to abide by the terms")+'</label>';
-                                content += '<input type="checkbox" id="accept">';
-                                content += '</form>';
-                                var popup;
-                                var options = {
-                                    title:	M.Util._("Download products"),
-                                    content: content,
-                                    dataType: "list",
-                                    resize: false,
-                                    value: [{
-                                        title:M.Util._("Ok"), 
-                                        value:"y"
-                                    },
-                                    {
-                                        title:M.Util._("Cancel"), 
-                                        value:"n"
-                                    }],
-                                    callback: function(v){
-                                        if (v === 'y') {
-                                            if($("#lastName").val().length === 0 || $("#firstName").val().length === 0 
-                                                    || $("#email").val().length === 0
-                                                || !$("#accept")[0].checked) {
-                                                alert(M.Plugins.Take5._o._("You have to fill all the fields and accept the license"));
-                                            } else {
-                                                window.open(M.Plugins.Take5._o.downloadUrl+"?file="+M.Plugins.Take5._o.selectedFeature.properties.services.download.url,
-                                                            "_blank");
-                                                
-                                                $.post(M.Plugins.Take5._o.addUserDownloadUrl, {
-                                                    lastname: $("#lastName").val(),
-                                                    firstname: $("#firstName").val(),
-                                                    email: $("#email").val(),
-                                                    file: M.Plugins.Take5._o.selectedFeature.properties.services.download.url
-                                                });
-                                                popup.remove();
-                                            }
-                                        } else {
-                                            popup.remove();
-                                        }
-                                    }
-                                };
-
-                                 /* Create popup */
-                                popup = new M.Popup({
-                                    modal:true,
-                                    autoSize:true,
-                                    centered:true,
-                                    resize:false,
-                                    header:options.title,
-                                    body:options.content ? options.content : ''
-
-                                });
-                                
-                                var el,icon,count = 0;
-                
-                                /*
-                                 * Roll over items
-                                 */
-                                for (var i in options.value) {
-                                    id = M.Util.getId();
-                                    el = options.value[i];
-                                    icon = el.icon ? '<img class="middle" src="'+el.icon+'"/>&nbsp;' : '';
-                                    popup.append('<a href="#" class="button marged" id="'+id+'">'+icon+el.title+'</a>', 'body');
-
-                                    /*
-                                     * Return item value to callback on click
-                                     */
-                                    (function(d, a, c, v){
-                                        a.click(function(e){
-                                            if ($.isFunction(c)){
-                                                c(v);
-                                            }
-                                        });
-                                    })(popup, $('#'+id), options.callback, el.value);
-
-                                    count++;
-                                }
-                                
-                                /*
-                                * Show the modal window
-                                */
-                               popup.show();
-                               
-                               $.get(M.Plugins.Take5._o.licenseUrl,function(data) {
-                                   $('textarea').html(data);
-                               });
-                            });
-                            
-                            /*
-                             * Set downladall link
-                             */
-                            $('#' + id + 'da').click(function() {
-
-                                alert("TODO");
-                                return false;
-
-                            });
 
                         }
                     }
@@ -530,11 +538,10 @@
             texts["Choose a site"] = ["Sélectionner un site"];
             texts["Available products"] = ["Produits disponibles"];
             texts["Search products"] = ["Recherche de produits"];
-            texts["Download product"] = ["Télécharger le produit"];
+            texts["Download"] = ["Télécharger"];
             texts["Download serie"] = ["Télécharger la série"];
-            texts["Download level 1C"] = ["Télécharger tout le Niveau 1C"];
-            texts["Download level 2A"] = ["Télécharger tout le Niveau 2A"];
-            texts["Download serie"] = ["Télécharger la série"];
+            texts["Download all Level 1C"] = ["Télécharger tout le Niveau 1C"];
+            texts["Download all Level 2A"] = ["Télécharger tout le Niveau 2A"];
             texts["All right reserved"] = ["Tous droits réservés"];
             texts["Take 5 project"] = ["Projet Take 5"];
             texts["Last name"] = ["Nom"];

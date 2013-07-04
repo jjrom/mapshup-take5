@@ -63,7 +63,7 @@ fi
 cp $SRC/src/index.html $TARGET
 cp $SRC/src/Take5.js $TARGET/$PROJECT
 cp $SRC/src/style.css $TARGET/$PROJECT
+cp $SRC/src/license.txt $TARGET
 cp -R $SRC/src/img $TARGET/$PROJECT
 cp -R $SRC/src/lib $TARGET/$PROJECT
-cp -R $SRC/src/help_* $TARGET/$PROJECT
 echo -e " -> done!\n"
