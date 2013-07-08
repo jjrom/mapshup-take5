@@ -5,10 +5,9 @@
      * 
      * Should be changed to match target server
      */
-    c["general"].rootUrl = "http://localhost/mapshupTake5";
-    //c["general"].rootUrl = "http://spirit.cnes.fr/take5";
+    c["general"].rootUrl = "http://spirit.cnes.fr/take5";
     c["general"].serverRootUrl = c["general"].rootUrl + "/s";
-    //c["general"].proxyUrl = null;
+    c["general"].proxyUrl = null;
 
     /*
      * !! DO NOT EDIT UNDER THIS LINE !!
