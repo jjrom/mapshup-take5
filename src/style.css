@@ -154,7 +154,6 @@ body {
 
 /* QuickSelector */
 .quickselector {
-    position:static;
     float:left;
     bottom:auto;
     right:auto;
@@ -220,6 +219,7 @@ input {
 textarea {
     display: inline-block;
     vertical-align: top;
+    color: black;
 }
 
 input[type="email"] {

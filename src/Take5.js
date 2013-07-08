@@ -64,6 +64,7 @@
 
             $.extend(self, {
                 searchService: options.searchService,
+                archivesUrl: options.archivesUrl,
                 downloadUrl: options.downloadUrl,
                 licenseUrl: options.licenseUrl,
                 addUserDownloadUrl: options.addUserDownloadUrl,
@@ -111,7 +112,21 @@
                     }
                 },
                 ol: {
-                    displayInLayerSwitcher: false
+                    displayInLayerSwitcher: false,
+                    styleMap: new OpenLayers.StyleMap({
+                        "default": new OpenLayers.Style(OpenLayers.Util.applyDefaults({
+                        fillOpacity: 0.01,
+                        strokeColor:"#F00",
+                        strokeWidth:1,
+                        fillColor:"#000"
+                        },
+                        OpenLayers.Feature.Vector.style["default"]),
+                        {}),
+                        "select": {
+                            strokeColor:"#ffff00",
+                            fillOpacity: 0.01
+                        }
+                    })
                 }
             });
 
@@ -192,7 +207,7 @@
                     /*
                      * Copyright
                      */
-                    $('#Mfooter').append('<div class="copyright">' + self._("Take 5 project") + ' | <a href="http://www.cnes.fr">CNES</a> - <a href="http://www.cesbio.ups-tlse.fr">Cesbio</a> - <a href="http://www.usgs.gov">USGS</a> | ' + self._("All right reserved") + ' - copyright <a href="http://www.cnes.fr">CNES</a> © ' + (new Date()).getFullYear() + '</div>');
+                    $('#Mfooter').append('<div class="copyright">' + self._("Take 5 project") + ' | <a href="http://www.cnes.fr">CNES</a> - <a href="http://www.cesbio.ups-tlse.fr">Cesbio</a> | ' + self._("All right reserved") + ' - copyright <a href="http://www.cnes.fr">CNES</a> © ' + (new Date()).getFullYear() + '</div>');
 
                     /*
                      * Avoid multiple initialization
@@ -283,8 +298,8 @@
                                 || !$("#accept")[0].checked) {
                                 alert(M.Plugins.Take5._o._("You have to fill all the fields and accept the license"));
                             } else {
-                                window.open(M.Plugins.Take5._o.downloadUrl+"?file="+file,
-                                            "_blank");
+                                //window.open(M.Plugins.Take5._o.downloadUrl+"?file="+file, "_blank");
+                                window.open(file, "_blank");
                                 
                                 $.post(M.Plugins.Take5._o.addUserDownloadUrl, {
                                     lastname: $("#lastName").val(),
@@ -412,7 +427,7 @@
                                         $d.append('<li id="dl2a" jtitle="' + self._("Download all Level 2A products")  + '" class="thumbs"><img src="./take5/img/level2A.png"/></li>');
                                         M.tooltip.add($('#dl2a'), 's');
                                         $('#dl2a').click(function() {
-                                            M.Plugins.Take5._o.displayPopupDownload(M.Plugins.Take5._o.selectedSite.attributes.identifier+"_LEVEL1C.tar", M.Plugins.Take5._o.selectedSite.attributes.identifier + " - " + self._("Level 1C"));
+                                            M.Plugins.Take5._o.displayPopupDownload(self.archivesUrl + "/" + M.Plugins.Take5._o.selectedSite.attributes.identifier+"_LEVEL1C.tar", M.Plugins.Take5._o.selectedSite.attributes.identifier + " - " + self._("Level 1C"));
                                         });
                                     }
                                     else if (feature.properties.product === "REFLECTANCETOA" && firstReflectanceTOA) {
@@ -420,7 +435,7 @@
                                         $d.append('<li id="dl1c" jtitle="' + self._("Download all Level 1C products")  + '" class="thumbs"><img src="./take5/img/level1C.png"/></li>');
                                         M.tooltip.add($('#dl1c'), 's');
                                         $('#dl1c').click(function() {
-                                            M.Plugins.Take5._o.displayPopupDownload(M.Plugins.Take5._o.selectedSite.attributes.identifier+"_LEVEL2A.tar", M.Plugins.Take5._o.selectedSite.attributes.identifier + " - " + self._("Level 2A"));
+                                            M.Plugins.Take5._o.displayPopupDownload(self.archivesUrl + "/" + M.Plugins.Take5._o.selectedSite.attributes.identifier+"_LEVEL2A.tar", M.Plugins.Take5._o.selectedSite.attributes.identifier + " - " + self._("Level 2A"));
                                         });
                                     }
                                     

@@ -5,9 +5,10 @@
      * 
      * Should be changed to match target server
      */
-    c["general"].rootUrl = "http://spirit.cnes.fr/take5";
+    c["general"].rootUrl = "http://localhost/mapshupTake5";
+    //c["general"].rootUrl = "http://spirit.cnes.fr/take5";
     c["general"].serverRootUrl = c["general"].rootUrl + "/s";
-    c["general"].proxyUrl = null;
+    //c["general"].proxyUrl = null;
 
     /*
      * !! DO NOT EDIT UNDER THIS LINE !!
@@ -43,6 +44,7 @@
                 options: {
                     searchService: "http://spirit.cnes.fr/take5/ws/search.php?q=",
                     sitesUrl: "http://spirit.cnes.fr/take5/ws/getSites.php?language=",
+                    archivesUrl: "http://spirit.cnes.fr/take5/archives",
                     downloadUrl: "http://spirit.cnes.fr/take5/ws/getProductFile.php",
                     licenseUrl: c["general"].rootUrl + "/license.txt",
                     addUserDownloadUrl: "http://spirit.cnes.fr/take5/ws/take5AddDownload.php",
