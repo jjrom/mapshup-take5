@@ -61,6 +61,7 @@ then
     mkdir $TARGET/$PROJECT
 fi
 cp $SRC/src/index.html $TARGET
+cp $SRC/src/indext.html $TARGET
 cp $SRC/src/Take5.js $TARGET/$PROJECT
 cp $SRC/src/style.css $TARGET/$PROJECT
 cp $SRC/src/license.txt $TARGET

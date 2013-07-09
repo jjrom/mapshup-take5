@@ -3,22 +3,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>SPOT4 (Take5)</title>
-        <script type="text/javascript">
-            var uagent = navigator.userAgent.toLowerCase();
-            if (/msie (\d+\.\d+);/.test(uagent)) { 
-                if (9 > new Number(RegExp.$1)) {
-                    window.location = 'error.html';
-                }
-            }
- 
-            if (uagent.indexOf("android") > -1 || uagent.indexOf("ipad") > -1 || uagent.indexOf("iphone") > -1 || uagent.indexOf("ipod") > -1) {
-                window.location = 'indext.html' + document.location.search;
-            }
-        </script>
         <link rel="shortcut icon" href="./favicon.ico" />
         <!-- Custom font from Google Web Fonts -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css' />
         <link rel="stylesheet" type="text/css" href="js/mol/theme/default/style.css" />
+        <link rel="stylesheet" type="text/css" href="js/mol/theme/default/style.mobile.css" />
         <link rel="stylesheet" type="text/css" href="js/mjquery/mjquery.css" />
         <link rel="stylesheet" type="text/css" href="js/mapshup/theme/default/mapshup.css" />
         <link rel="stylesheet" type="text/css" href="take5/style.css" />
@@ -42,12 +31,14 @@
         <!-- Openlayers -->
         <script type="text/javascript" src="js/mol/OpenLayers.js"></script>
         <!-- mapshup -->
-        <script type="text/javascript" src="js/mapshup/mapshup.js"></script>
+        <script type="text/javascript" src="js/mapshup/mapshupt.js"></script>
         <script type="text/javascript" src="js/mapshup/config/default.js"></script>
         <!-- Take5 -->
         <script type="text/javascript" src="take5/lib/selectboxit.js"></script>
         <script type="text/javascript" src="take5/Take5.js"></script>
         <script type="text/javascript" src="js/mapshup/config/config.js"></script>
+        <!-- Touch -->
+        <script type="text/javascript" src="js/mapshup/config/touch.js"></script>
         
         <!-- Launch mapshup at startup -->
         <script type="text/javascript">

@@ -85,7 +85,7 @@
              * Tell user that Take5 initializes
              */
             M.mask.add({
-                title: self._("Initializing Take5"),
+                title: self._("Initializing SPOT 4 (Take5)"),
                 cancel: false
             });
 
@@ -207,7 +207,7 @@
                     /*
                      * Copyright
                      */
-                    $('#Mfooter').append('<div class="copyright">' + self._("Take 5 project") + ' | <a href="http://www.cnes.fr">CNES</a> - <a href="http://www.cesbio.ups-tlse.fr">Cesbio</a> | ' + self._("All right reserved") + ' - copyright <a href="http://www.cnes.fr">CNES</a> © ' + (new Date()).getFullYear() + '</div>');
+                    $('#Mfooter').append('<div class="copyright">' + self._("SPOT 4 (Take5) project") + ' | <a href="http://www.cnes.fr">CNES</a> - <a href="http://www.cesbio.ups-tlse.fr">Cesbio</a> | ' + self._("All right reserved") + ' - copyright <a href="http://www.cnes.fr">CNES</a> © ' + (new Date()).getFullYear() + '</div>');
 
                     /*
                      * Avoid multiple initialization
@@ -474,6 +474,16 @@
                                             M.Plugins.Take5._o.displayPopupDownload(M.Plugins.Take5._o.selectedFeature.properties.services.download.url, M.Plugins.Take5._o.selectedFeature.properties.identifier);
                                         });
                                         
+                                        /*
+                                         * Display quiclook within a popup
+                                         */
+                                        /*
+                                        $('#slastql').click(function() {
+                                            var $t = $(this);
+                                            M.Util.showPopupImage($t.attr('href'), $t.attr('title'));
+                                            return false;
+                                        });
+                                        */
                                         self.resize();
 
                                         return false;
@@ -549,7 +559,7 @@
         this._ = function(text) {
             var texts = [];
             texts["About"] = ["A propos"];
-            texts["Initializing Take5"] = ["Take 5 : initialisation"];
+            texts["Initializing SPOT 4 (Take5)"] = ["SPOT 4 (Take5) : initialisation"];
             texts["Choose a site"] = ["Sélectionner un site"];
             texts["Available products"] = ["Produits disponibles"];
             texts["Search products"] = ["Recherche de produits"];
@@ -558,7 +568,7 @@
             texts["Download all Level 1C products"] = ["Télécharger tout le Niveau 1C"];
             texts["Download all Level 2A products"] = ["Télécharger tout le Niveau 2A"];
             texts["All right reserved"] = ["Tous droits réservés"];
-            texts["Take 5 project"] = ["Projet Take 5"];
+            texts["SPOT 4 (Take5) project"] = ["Projet SPOT 4 (Take5)"];
             texts["Last name"] = ["Nom"];
             texts["First name"] = ["Prénom"];
             texts["Email"] = ["Email"];
