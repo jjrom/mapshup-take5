@@ -411,7 +411,7 @@
                              * +--------+--------+--------+
                              * 
                              */
-                            $('#side2').html('<div class="quickselector"><ul id="' + id + '"></ul></div>');
+                            $('#side2').html('<div class="small bold">' + self._("Click on 2A or 1C icon to download all products") + '</div><div class="quickselector"><ul id="' + id + '"></ul></div>');
                             
                             for (i = 0; i < l; i++) {
 
@@ -574,6 +574,7 @@
             texts["Email"] = ["Email"];
             texts["I have read the license to use and I agree to abide by the terms"] = ["J\'ai lu la license d\'utilisation et je m\'engage à en respecter les termes"];
             texts["You have to fill all the fields and accept the license"] = ["Vous devez remplir tous les champs et accepter la license"];
+            texts["Click on 2A or 1C icon to download all products"] = ["Cliquez sur les icones 2A et 1C pour télécharger tous les produits"];
             
             if (M.Config.i18n.lang === 'fr') {
                 return texts[text] || text;
