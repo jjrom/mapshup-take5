@@ -68,7 +68,8 @@
                 downloadUrl: options.downloadUrl,
                 licenseUrl: options.licenseUrl,
                 addUserDownloadUrl: options.addUserDownloadUrl,
-                aboutUrl: options.aboutUrl
+                aboutUrl: options.aboutUrl,
+                theiaUrl: options.theiaUrl
             });
 
             /*
@@ -79,7 +80,7 @@
             /*
              * Set Help and links
              */
-            M.Util.$$('#Mheader').append('<div class="links"><ul><li><a href="' + self.aboutUrl + '" target="_blank">' + self._("About") + '</a></li></ul></div>');
+            M.Util.$$('#Mheader').append('<div class="links"><ul><li><a href="' + self.aboutUrl + '" target="_blank">' + self._("About") + '</a></li><li><a href="' + self.theiaUrl + '" target="_blank">' + self._("Theia") + '</a></li></ul></div>');
 
             /*
              * Tell user that Take5 initializes
@@ -240,6 +241,14 @@
                 'max-width': $('#side1').width() - 20
             });
 
+	    $('#Mfooter .container').css('height', Math.max(340,$('#leftCol').height()+40));
+	    $('#Mfooter').css('height', $('#Mfooter .container').height()+60);
+
+	    
+	    $('#Mfooter').css('top', $('.map').height()+$('.map').offset().top);
+	    $('#mapcontainer').css('height', '100%');
+
+	    $('.wrapper').css('min-height', $('#Mfooter').height() + $('#Mfooter').offset().top);
         };
 
 
@@ -268,6 +277,9 @@
                 content += '<label>'+M.Plugins.Take5._o._("First name")+'</label>';
                 content += '<input type="text" id="firstName" style="margin-bottom:10px;" required>';
                 content += '</br>';
+                content += '<label>'+M.Plugins.Take5._o._("Organism")+'</label>';
+                content += '<input type="text" id="organism" style="margin-bottom:10px;" required>';
+                content += '</br>';
                 content += '<label>'+M.Plugins.Take5._o._("Email")+'</label>';
                 content += '<input type="email" id="email" style="margin-bottom:10px;" required>';
                 content += '</br>';
@@ -294,7 +306,7 @@
                     callback: function(v){
                         if (v === 'y') {
                             if($("#lastName").val().length === 0 || $("#firstName").val().length === 0 
-                                    || $("#email").val().length === 0
+                                    || $("#organism").val().length === 0 || $("#email").val().length === 0
                                 || !$("#accept")[0].checked) {
                                 alert(M.Plugins.Take5._o._("You have to fill all the fields and accept the license"));
                             } else {
@@ -304,6 +316,7 @@
                                 $.post(M.Plugins.Take5._o.addUserDownloadUrl, {
                                     lastname: $("#lastName").val(),
                                     firstname: $("#firstName").val(),
+                                    organism: $("#organism").val(),
                                     email: $("#email").val(),
                                     file: file
                                 });
@@ -376,7 +389,7 @@
              * Show site description
              */
             $('#leftCol .description').html(site.attributes.description);
-
+	    self.resize();
 	    self.selectedSite = site;
 
             /*
@@ -571,6 +584,7 @@
             texts["SPOT 4 (Take5) project"] = ["Projet SPOT 4 (Take5)"];
             texts["Last name"] = ["Nom"];
             texts["First name"] = ["Prénom"];
+            texts["Organism"] = ["Organisme"];
             texts["Email"] = ["Email"];
             texts["I have read the license to use and I agree to abide by the terms"] = ["J\'ai lu la license d\'utilisation et je m\'engage à en respecter les termes"];
             texts["You have to fill all the fields and accept the license"] = ["Vous devez remplir tous les champs et accepter la license"];

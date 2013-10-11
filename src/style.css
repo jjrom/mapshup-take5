@@ -4,6 +4,9 @@
 body {
     background: none repeat scroll 0 0 #E4E4E4;
 }
+html {
+    overflow: auto;
+}
 #mwrapper {
     position:absolute;
     left:150px;
@@ -18,7 +21,9 @@ body {
 }
 .map {
     top:75px;
-    bottom:400px;
+    height:500px;
+    min-height:500px;
+    max-height:500px;
     left:0px;
     right:0px;
     border-top:3px solid #f3961c;
@@ -36,7 +41,6 @@ body {
     font-family:'Open Sans Condensed', sans-serif;
     color: #000;
     height:400px;
-    overflow: auto;
 }
 
 #__CONTROL_ATTRIBUTION__ {
@@ -117,7 +121,8 @@ body {
 #Mfooter .container #leftCol {
     background-color:#f3961c;
     color:#fff;
-    height:300px;
+    height:auto;
+    min-height:300px;
     max-width:35%;
     padding:10px;
     float: left;
