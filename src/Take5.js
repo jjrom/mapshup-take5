@@ -241,7 +241,7 @@
                 'max-width': $('#side1').width() - 20
             });
 
-	    $('#Mfooter .container').css('height', Math.max(340,$('#leftCol').height()+40));
+	    $('#Mfooter .container').css('height', Math.max(340,$('#leftCol').height()+40), $('.quickselector').height()+50);
 	    $('#Mfooter').css('height', $('#Mfooter .container').height()+60);
 
 	    
